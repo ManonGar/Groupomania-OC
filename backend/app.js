@@ -15,7 +15,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // On accède aux variables d'environnement
-const MY_PORT = process.env.PORT;
 const MY_APP_SECRET = process.env.APP_SECRET;
 // On se connecte à la base de données avec mongoose
 mongoose.connect(MY_APP_SECRET,

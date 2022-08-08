@@ -36,13 +36,13 @@ exports.modifyPost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
       // si l'id du créateur de la sauce est différent de l'id de l'utilisateur on renvoie une erreur 403 ET que l'utilisateur n'est pas admin
-      if (post.userId !== req.auth.userId && post.userId.isAdmin == false) {
+      if (post.userId !== req.auth.userId) {
         res.status(403).json({ error: "Unauthorized request" });
       // sinon on modifie la sauce
       } else {
           const postObject = req.file ? 
           {
-          ...JSON.parse(req.body.sauce),
+          ...JSON.parse(req.body.post),
           imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
           } : { ...req.body };      
           Post.updateOne(
@@ -61,7 +61,7 @@ exports.deletePost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
       // si l'id du créateur de la sauce est différent de l'id de l'utilisateur on renvoie une erreur 403 ET que l'utilisateur n'est pas admin
-      if (post.userId !== req.auth.userId && post.userId.isAdmin == false) {
+      if (post.userId !== req.auth.userId) {
         res.status(403).json({ error: "Unauthorized request" });
       // sinon on supprime la sauce
       } else {
