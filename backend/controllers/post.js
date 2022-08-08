@@ -90,62 +90,94 @@ exports.getAllPosts = (req, res, next) => {
     );
 };
 
+// exports.likePost = (req, res, next) => {
+//   switch (req.body.like) {
+//     // Like
+//     case 1:
+//       Post.updateOne(
+//         { _id: req.params.id },
+//         // On ajoute l'id de l'utilisateur dans le tableau usersLiked et on incrémente de 1
+//         { $push: { usersLiked: req.body.userId }, $inc: { likes: +1 } }
+//       )
+//         .then(() => res.status(200).json({ message: 'J\'aime ce message !' }))
+//         .catch((error) => res.status(400).json({ error }));
+//       break;
+//     // Annulation du like ou dislike
+//     case 0:
+//       Post.findOne({ _id: req.params.id })
+//         .then((post) => {
+//           // si l'id de l'utilisateur se trouve dans le tableau usersLiked
+//           if (post.usersLiked.includes(req.body.userId)) {
+//             Post.updateOne(
+//               { _id: req.params.id },
+//               // On retire l'id de l'utilisateur du tableau usersLiked et on incrémente de -1
+//               { $pull: { usersLiked: req.body.userId }, $inc: { likes: -1 } }
+//             )
+//               .then(() =>
+//                 res.status(200).json({ message: 'Like supprimé !' })
+//               )
+//               .catch((error) => res.status(400).json({ error }));
+//           }
+//           // si l'id de l'utilisateur se trouve dans le tableau usersDisliked
+//           // if (post.usersDisliked.includes(req.body.userId)) {
+//           //   Post.updateOne(
+//           //     { _id: req.params.id },
+//           //     // On retire l'id de l'utilisateur du tableau usersDisliked et on incrémente de -1
+//           //     { $pull: { usersDisliked: req.body.userId }, $inc: { dislikes: -1 } }
+//           //   )
+//           //     .then(() =>
+//           //       res.status(200).json({ message: 'Dislike supprimé !' })
+//           //     )
+//           //     .catch((error) => res.status(400).json({ error }));
+//           // }
+//         })
+//         .catch((error) => res.status(404).json({ error }));
+//       break;
+//     // Dislike
+//     // case -1:
+//     //   Post.updateOne(
+//     //     { _id: req.params.id },
+//     //     // On ajoute l'id de l'utilisateur dans le tableau usersDisliked et on incrémente de 1
+//     //     { $push: { usersDisliked: req.body.userId }, $inc: { dislikes: +1 } }
+//     //   )
+//     //     .then(() => {
+//     //       res.status(200).json({ message: 'Je n\'aime pas ce message !' });
+//     //     })
+//     //     .catch((error) => res.status(400).json({ error }));
+//     //   break;
+//     default:
+//       console.log(error);
+//   }
+// }
+
 exports.likePost = (req, res, next) => {
-  switch (req.body.like) {
-    // Like
-    case 1:
+  Post.findOne({ _id: req.params.id }).then((post) => {
+    
+    if (!post.usersLiked.includes(req.body.userId) && req.body.like === 1) {
+      
       Post.updateOne(
         { _id: req.params.id },
-        // On ajoute l'id de l'utilisateur dans le tableau usersLiked et on incrémente de 1
-        { $push: { usersLiked: req.body.userId }, $inc: { likes: +1 } }
+        {
+          $inc: { likes: req.body.like++ },
+          $push: { usersLiked: req.body.userId },
+        }
       )
-        .then(() => res.status(200).json({ message: 'J\'aime ce message !' }))
+        .then(() => res.status(201).json({ message: "Like ajouté !" }))
         .catch((error) => res.status(400).json({ error }));
-      break;
-    // Annulation du like ou dislike
-    case 0:
-      Post.findOne({ _id: req.params.id })
-        .then((post) => {
-          // si l'id de l'utilisateur se trouve dans le tableau usersLiked
-          if (post.usersLiked.includes(req.body.userId)) {
-            Post.updateOne(
-              { _id: req.params.id },
-              // On retire l'id de l'utilisateur du tableau usersLiked et on incrémente de -1
-              { $pull: { usersLiked: req.body.userId }, $inc: { likes: -1 } }
-            )
-              .then(() =>
-                res.status(200).json({ message: 'Like supprimé !' })
-              )
-              .catch((error) => res.status(400).json({ error }));
-          }
-          // si l'id de l'utilisateur se trouve dans le tableau usersDisliked
-          if (post.usersDisliked.includes(req.body.userId)) {
-            Post.updateOne(
-              { _id: req.params.id },
-              // On retire l'id de l'utilisateur du tableau usersDisliked et on incrémente de -1
-              { $pull: { usersDisliked: req.body.userId }, $inc: { dislikes: -1 } }
-            )
-              .then(() =>
-                res.status(200).json({ message: 'Dislike supprimé !' })
-              )
-              .catch((error) => res.status(400).json({ error }));
-          }
-        })
-        .catch((error) => res.status(404).json({ error }));
-      break;
-    // Dislike
-    case -1:
+    }
+
+    if (post.usersLiked.includes(req.body.userId) && req.body.like === 0) {
       Post.updateOne(
         { _id: req.params.id },
-        // On ajoute l'id de l'utilisateur dans le tableau usersDisliked et on incrémente de 1
-        { $push: { usersDisliked: req.body.userId }, $inc: { dislikes: +1 } }
+        {
+          $inc: { likes: -1 },
+          $pull: { usersLiked: req.body.userId },
+        }
       )
-        .then(() => {
-          res.status(200).json({ message: 'Je n\'aime pas ce message !' });
-        })
+        .then(() => res.status(200).json({ message: "Like supprimé !" }))
         .catch((error) => res.status(400).json({ error }));
-      break;
-    default:
-      console.log(error);
-  }
-}
+    }
+
+    
+  });  
+};
