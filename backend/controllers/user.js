@@ -44,15 +44,7 @@ User.findOne({ email: req.body.email })
 };
 
 exports.logout = (req, res, next) => {
-    if (req.session) {
-        req.session.destroy(err => {
-          if (err) {
-            res.status(400).json({message: 'Unable to log out'})
-          } else {
-            res.json({message: 'Logout successful'})
-          }
-        });
-      } else {
-        res.end()
-      }
-}
+  res.status(200).json({
+    userId: '',
+    token: '', 
+}).catch(error => res.status(500).json({ error }))};

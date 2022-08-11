@@ -1,5 +1,6 @@
 const Post = require('../models/post');
 const fs = require('fs');
+const User = require('../models/User');
 
 // Création des différentes logiques pour les routes post
 // (create, getOne, modify, delete, getAll, like)
@@ -35,24 +36,27 @@ exports.getOnePost = (req, res, next) => {
 exports.modifyPost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
-      // si l'id du créateur de la sauce est différent de l'id de l'utilisateur on renvoie une erreur 403 ET que l'utilisateur n'est pas admin
-      if (post.userId !== req.auth.userId) {
-        res.status(403).json({ error: "Unauthorized request" });
-      // sinon on modifie la sauce
-      } else {
-          const postObject = req.file ? 
-          {
-          ...JSON.parse(req.body.post),
-          imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-          } : { ...req.body };      
-          Post.updateOne(
-            { _id: req.params.id },
-            { ...postObject, _id: req.params.id }
-          )
-            .then(() => res.status(200).json({ message: "Post modifié." }))
-            .catch((error) => res.status(400).json({ error }));
-      
-      }
+      User.findOne({_id: req.auth.userId}).then((user) => {
+        // si l'id du créateur de la sauce est différent de l'id de l'utilisateur ET que l'utilisateur n'est pas admin on renvoie une erreur 403 
+        if (post.userId !== req.auth.userId && user.role !== "admin") {
+          res.status(403).json({ error: "Unauthorized request" });
+        // sinon on modifie la sauce
+        } else {
+            const postObject = req.file ? 
+            {
+            ...JSON.parse(req.body.post),
+            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+            } : { ...req.body };      
+            Post.updateOne(
+              { _id: req.params.id },
+              { ...postObject, _id: req.params.id }
+            )
+              .then(() => res.status(200).json({ message: "Post modifié." }))
+              .catch((error) => res.status(400).json({ error }));
+        
+        }
+
+      })
     })
     .catch((error) => res.status(400).json({ error }));
 };
@@ -60,18 +64,20 @@ exports.modifyPost = (req, res, next) => {
 exports.deletePost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
-      // si l'id du créateur de la sauce est différent de l'id de l'utilisateur on renvoie une erreur 403 ET que l'utilisateur n'est pas admin
-      if (post.userId !== req.auth.userId) {
-        res.status(403).json({ error: "Unauthorized request" });
-      // sinon on supprime la sauce
-      } else {
-        const filename = post.imageUrl.split("/images/")[1];
-        fs.unlink(`images/${filename}`, () => {
-          Post.deleteOne({ _id: req.params.id })
-            .then(() => res.status(200).json({ message: "Post supprimé !" }))
-            .catch((error) => res.status(400).json({ error }));
-        });
-      }
+      User.findOne({_id: req.auth.userId}).then((user) => {
+        // si l'id du créateur de la sauce est différent de l'id de l'utilisateur ET que l'utilisateur n'est pas admin on renvoie une erreur 403
+        if (post.userId !== req.auth.userId && user.role !== "admin") {
+          res.status(403).json({ error: "Unauthorized request" });
+        // sinon on supprime la sauce
+        } else {
+          const filename = post.imageUrl.split("/images/")[1];
+          fs.unlink(`images/${filename}`, () => {
+            Post.deleteOne({ _id: req.params.id })
+              .then(() => res.status(200).json({ message: "Post supprimé !" }))
+              .catch((error) => res.status(400).json({ error }));
+          });
+        }
+      })
     })
     .catch((error) => res.status(500).json({ error }));
 };
@@ -158,7 +164,7 @@ exports.likePost = (req, res, next) => {
       Post.updateOne(
         { _id: req.params.id },
         {
-          $inc: { likes: req.body.like++ },
+          $inc: { likes: +1 },
           $push: { usersLiked: req.body.userId },
         }
       )
