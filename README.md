@@ -20,12 +20,12 @@ Dépendances :
 - React
 
 Pour lancer l'application :
-1. le backend
+1. côté backend
 - Se placer dans le dossier backend
 - Exécuter npm install
 - Exécuter nodemon server 
 
-2. le frontend
+2. côté frontend
 - Se placer dans le dossier frontend
 - Exécuter npm install
 - Exécuter npm start 
