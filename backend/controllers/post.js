@@ -37,14 +37,14 @@ exports.modifyPost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
       User.findOne({_id: req.auth.userId}).then((user) => {
-        // si l'id du créateur de la sauce est différent de l'id de l'utilisateur ET que l'utilisateur n'est pas admin on renvoie une erreur 403 
+        // si l'id du créateur du post est différent de l'id de l'utilisateur ET que l'utilisateur n'est pas admin on renvoie une erreur 403 
         if (post.userId !== req.auth.userId && user.role !== "admin") {
           res.status(403).json({ error: "Unauthorized request" });
-        // sinon on modifie la sauce
+        // sinon on modifie le post
         } else {
             const postObject = req.file ? 
             {
-            ...JSON.parse(req.body.post),
+            ...req.body,
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
             } : { ...req.body };      
             Post.updateOne(
