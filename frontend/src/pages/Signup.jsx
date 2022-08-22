@@ -64,9 +64,6 @@ function SignUp() {
         }
       )
       console.log(JSON.stringify(response?.data))
-
-      //clear state and controlled inputs
-      //need value attrib on inputs for this
       setEmail('')
       setPassword('')
       navigate('/home', { replace: true })

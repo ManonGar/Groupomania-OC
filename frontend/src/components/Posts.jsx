@@ -1,8 +1,7 @@
-import Card from '../Card'
+import Card from './Card'
 import styled from 'styled-components'
 import { useState, useEffect } from 'react'
-import useAxiosPrivate from '../../hooks/useAxiosPrivate'
-import { useNavigate, useLocation } from 'react-router-dom'
+import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 const CardsContainer = styled.div`
   display: flex;
@@ -15,8 +14,6 @@ const CardsContainer = styled.div`
 const Posts = () => {
   const [posts, setPosts] = useState([])
   const axiosPrivate = useAxiosPrivate()
-  const navigate = useNavigate()
-  const location = useLocation()
 
   useEffect(() => {
     let isMounted = true
@@ -28,7 +25,6 @@ const Posts = () => {
         isMounted && setPosts(response.data)
       } catch (err) {
         console.error(err)
-        // navigate('/login', { state: { from: location }, replace: true })
       }
     }
 
@@ -37,7 +33,7 @@ const Posts = () => {
     return () => {
       isMounted = false
     }
-  }, [axiosPrivate, location])
+  }, [axiosPrivate])
 
   return (
     <CardsContainer>

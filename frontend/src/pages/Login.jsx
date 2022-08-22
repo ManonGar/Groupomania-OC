@@ -5,10 +5,6 @@ import colors from './../utils/style/colors'
 import axios from '../api/axios'
 import useAuth from '../hooks/useAuth'
 
-// const LoginWrapper = styled.div`
-//   display: flex;
-//   justify-content: center;
-// `
 const LoginCard = styled.div`
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
@@ -79,11 +75,7 @@ function Login() {
       const userRole = response?.data?.role
       setAuth({ token, userId, userRole })
       localStorage.setItem('isLoggedin', true)
-      // localStorage.setItem('userId', userId)
-      // localStorage.setItem('userRole', userRole)
 
-      //clear state and controlled inputs
-      //need value attrib on inputs for this
       setEmail('')
       setPassword('')
       navigate('/home', { replace: true })
@@ -109,7 +101,6 @@ function Login() {
   // }, [persist])
 
   return (
-    // <LoginWrapper>
     <LoginCard>
       <Title>
         <h1>Connectez-vous !</h1>
@@ -132,18 +123,8 @@ function Login() {
         <Btn onClick={handleSubmit} type="submit">
           Connexion
         </Btn>
-        {/* <div className="persistCheck">
-            <input
-              type="checkbox"
-              id="persist"
-              onChange={togglePersist}
-              checked={persist}
-            />
-            <label htmlFor="persist">Trust This Device</label>
-          </div> */}
       </Form>
     </LoginCard>
-    // </LoginWrapper>
   )
 }
 

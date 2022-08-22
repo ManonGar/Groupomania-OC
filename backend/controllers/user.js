@@ -43,9 +43,3 @@ User.findOne({ email: req.body.email })
     })
     .catch(error => res.status(500).json({ error }));
 };
-
-exports.logout = (req, res, next) => {
-  res.status(200).json({
-    userId: '',
-    token: '', 
-}).catch(error => res.status(500).json({ error }))};

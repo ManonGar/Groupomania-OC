@@ -1,7 +1,4 @@
 import styled from 'styled-components'
-// import { useContext } from 'react'
-// import { AuthContext } from '../utils/context'
-
 import Posts from '../components/Posts'
 import colors from '../utils/style/colors'
 import { Link } from 'react-router-dom'

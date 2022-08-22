@@ -1,13 +1,11 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import colors from '../../utils/style/colors'
-import logo from '../../assets/logo.png'
-import AuthContext from '../../utils/context'
+import colors from '../utils/style/colors'
+import logo from './../assets/logo.png'
+import AuthContext from '../utils/context'
 import { useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
-import useAuth from '../../hooks/useAuth'
-import Logout from '../Logout'
-// import useAuth from '../../hooks/useAuth'
+import useAuth from '../hooks/useAuth'
 
 const Navbar = styled.div`
   display: flex;

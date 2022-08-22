@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 import { useState, useEffect } from 'react'
-import useAxiosPrivate from '../../hooks/useAxiosPrivate'
+import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useParams } from 'react-router-dom'
-import colors from '../../utils/style/colors'
+import colors from '../utils/style/colors'
 import { useNavigate } from 'react-router-dom'
 
 const FormContainer = styled.div`

@@ -4,10 +4,9 @@ import PersistLogin from './components/PersistLogin'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Layout from './pages/Layout'
-// import Logout from './pages/Logout'
-import Post from './pages/Post'
+import Post from './pages/OnePost'
 import SignUp from './pages/Signup'
-import NewPost from './pages/New'
+import NewPost from './pages/NewPost'
 import EditPost from './components/EditPost'
 import Error from './components/Error'
 import { Routes, Route } from 'react-router-dom'
@@ -22,26 +21,26 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
 
         {/* protected routes */}
-        {/* <Route element={<PersistLogin />}> */}
-        <Route element={<RequireAuth />}>
-          <Route path="/home" element={<Home />} />
+        <Route element={<PersistLogin />}>
+          <Route element={<RequireAuth />}>
+            <Route path="/home" element={<Home />} />
+          </Route>
+
+          <Route element={<RequireAuth />}>
+            <Route path="/add" element={<NewPost />} />
+          </Route>
+
+          <Route element={<RequireAuth />}>
+            <Route path="/posts/:id" element={<Post />} />
+          </Route>
+
+          <Route element={<RequireAuth />}>
+            <Route path="/edit/:id" element={<EditPost />} />
+          </Route>
         </Route>
 
-        <Route element={<RequireAuth />}>
-          <Route path="/add" element={<NewPost />} />
-        </Route>
-
-        <Route element={<RequireAuth />}>
-          <Route path="/posts/:id" element={<Post />} />
-        </Route>
-
-        <Route element={<RequireAuth />}>
-          <Route path="/edit/:id" element={<EditPost />} />
-        </Route>
+        <Route path="*" element={<Error />} />
       </Route>
-
-      <Route path="*" element={<Error />} />
-      {/* </Route> */}
     </Routes>
   )
 }

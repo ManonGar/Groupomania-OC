@@ -87,14 +87,10 @@ const Post = () => {
   const [usersLiked, setUsersLiked] = useState([])
   const [likes, setLikes] = useState()
   const [userId, setUserId] = useState()
-  // const [image, setImage] = useState(null)
   const { id } = useParams()
   const userRole = auth?.userRole
-  // console.log(user)
   const navigate = useNavigate()
   const currentUserId = auth?.userId
-  // const currentUserId = localStorage.getItem('userId')
-  // const userRole = localStorage.getItem('userRole')
 
   useEffect(() => {
     let isMounted = true
@@ -120,24 +116,6 @@ const Post = () => {
       isMounted = false
     }
   }, [axiosPrivate, id])
-
-  // useEffect(() => {
-  //   const getUser = async () => {
-  //     try {
-  //       const response = await axiosPrivate.get('/api/auth/' + currentUserId)
-  //       console.log(response.data)
-  //     } catch (err) {
-  //       console.error(err)
-  //     }
-  //   }
-  // }, [axiosPrivate, currentUserId])
-
-  // const post = { userName, content }
-  // const formData = new FormData()
-  // formData.append('post', JSON.stringify(post))
-  // if (imageUrl) {
-  //   formData.append('image', imageUrl)
-  // }
 
   const deletePost = async (event) => {
     event.preventDefault()
