@@ -4,16 +4,15 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import colors from '../utils/style/colors'
 
-const LoginWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`
 const LoginCard = styled.div`
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   padding: 8px 16px;
-  width: 280px;
-  height: 350px;
+  margin: 0 37%;
+  height: 300px;
+  @media screen and (max-width: 992px) {
+    margin: 0 10%;
+  }
 `
 const Form = styled.div`
   display: flex;
@@ -73,33 +72,31 @@ function SignUp() {
   }
 
   return (
-    <LoginWrapper>
-      <LoginCard>
-        <Title>
-          <h1>Inscrivez-vous !</h1>
-        </Title>
-        <Form>
-          <label htmlFor="email">Email</label>
-          <Input
-            type="email"
-            placeholder="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <label htmlFor="password">Mot de passe</label>
-          <Input
-            type="password"
-            placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+    <LoginCard>
+      <Title>
+        <h1>Inscrivez-vous !</h1>
+      </Title>
+      <Form>
+        <label htmlFor="email">Email</label>
+        <Input
+          type="email"
+          placeholder="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <label htmlFor="password">Mot de passe</label>
+        <Input
+          type="password"
+          placeholder="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-          <Btn onClick={handleSubmit} type="submit">
-            Créer un compte
-          </Btn>
-        </Form>
-      </LoginCard>
-    </LoginWrapper>
+        <Btn onClick={handleSubmit} type="submit">
+          Créer un compte
+        </Btn>
+      </Form>
+    </LoginCard>
   )
 }
 
