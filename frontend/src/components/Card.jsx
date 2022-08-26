@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 const CardText = styled.p`
   color: ${colors.tertiary};
-  font-size: 18px;
+  font-size: 16px;
 `
 
 const CardTitle = styled.div`
