@@ -7,9 +7,7 @@ const postSchema = mongoose.Schema({
     userName: { type: String, required: true },
     imageUrl: { type: String, required: true },
     likes: { type: Number, required: false, default: 0 },
-    dislikes: { type: Number, required: false, default: 0 },
     usersLiked: { type: Array, required: false, default: [] },
-    usersDisliked: { type: Array, required: false, default:[] },
 });
 
 // On exporte le schéma en tant que modèle Mongoose, on le rend ainsi disponible pour notre application express
