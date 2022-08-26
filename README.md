@@ -1,5 +1,4 @@
-# Groupomania-OC
-GROUPOMANIA - P7 OPEN CLASSROOMS
+# Groupomania- P7 OPEN CLASSROOMS
 
 Objectif : créer un réseau social d'entreprise.
 
