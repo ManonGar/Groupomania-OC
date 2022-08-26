@@ -24,7 +24,7 @@ Pour lancer l'application :
 - Se placer dans le dossier backend
 - Exécuter npm install
 - créer un fichier .env à la racine du backend qui contient les variables d'environnement PORT et APP_SECRET(clé d'accès à la base de données MongoDB)
-- Exécuter nodemon server (installer nodemon le cas échéant - npm install nodemon)
+- Exécuter nodemon server (installer nodemon - npm install nodemon)
 
 2. côté frontend
 - Se placer dans le dossier frontend
