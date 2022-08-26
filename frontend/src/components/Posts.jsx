@@ -1,7 +1,7 @@
 import Card from './Card'
 import styled from 'styled-components'
 import { useState, useEffect } from 'react'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import axios from '../api/axios'
 
 const CardsContainer = styled.div`
   display: flex;
@@ -13,14 +13,18 @@ const CardsContainer = styled.div`
 
 const Posts = () => {
   const [posts, setPosts] = useState([])
-  const axiosPrivate = useAxiosPrivate()
+  const token = localStorage.getItem('token')
 
   useEffect(() => {
     let isMounted = true
 
     const getPosts = async () => {
       try {
-        const response = await axiosPrivate.get('/api/posts')
+        const response = await axios.get('/api/posts', {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+        })
         console.log(response.data)
         isMounted && setPosts(response.data)
       } catch (err) {
@@ -33,7 +37,7 @@ const Posts = () => {
     return () => {
       isMounted = false
     }
-  }, [axiosPrivate])
+  }, [token])
 
   return (
     <CardsContainer>

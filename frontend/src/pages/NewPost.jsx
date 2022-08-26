@@ -2,8 +2,7 @@ import styled from 'styled-components'
 import colors from '../utils/style/colors'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
-import useAuth from '../hooks/useAuth'
+import axios from '../api/axios'
 
 const FormContainer = styled.div`
   display: flex;
@@ -33,14 +32,12 @@ const TitleContainer = styled.div`
 
 function NewPost() {
   let navigate = useNavigate()
-  const { auth } = useAuth()
-
   const [userName, setUserName] = useState('')
   const [content, setContent] = useState('')
-  const userId = auth?.userId
+  const userId = localStorage.getItem('userId')
   const [file, setFile] = useState()
   const [image, setImage] = useState('')
-  const axiosPrivate = useAxiosPrivate()
+  const token = localStorage.getItem('token')
 
   const submitPost = async (event) => {
     event.preventDefault()
@@ -50,16 +47,16 @@ function NewPost() {
     formData.append('image', file)
 
     try {
-      const response = await axiosPrivate.post('/api/posts', formData)
+      const response = await axios.post('/api/posts', formData, {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      })
       console.log(response.data)
       navigate('/home', { replace: true })
     } catch (err) {
       console.log(err)
     }
-    setFile('')
-    setImage('')
-    setUserName('')
-    setContent('')
   }
 
   const handleImg = (event) => {

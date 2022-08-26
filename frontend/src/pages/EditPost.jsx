@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import { useState, useEffect } from 'react'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useParams } from 'react-router-dom'
 import colors from '../utils/style/colors'
 import { useNavigate } from 'react-router-dom'
+import axios from '../api/axios'
 
 const FormContainer = styled.div`
   display: flex;
@@ -33,11 +33,11 @@ const TitleContainer = styled.div`
 `
 
 const EditPost = () => {
-  const axiosPrivate = useAxiosPrivate()
   const [userName, setUserName] = useState('')
   const [content, setContent] = useState('')
   const [file, setFile] = useState('')
   const [picture, setPicture] = useState('')
+  const token = localStorage.getItem('token')
 
   const { id } = useParams()
   let navigate = useNavigate()
@@ -47,7 +47,11 @@ const EditPost = () => {
 
     const getPost = async () => {
       try {
-        const response = await axiosPrivate.get('/api/posts/' + id)
+        const response = await axios.get('/api/posts/' + id, {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+        })
         console.log(response.data)
         isMounted && setUserName(response.data.userName)
         setContent(response.data.content)
@@ -62,18 +66,21 @@ const EditPost = () => {
     return () => {
       isMounted = false
     }
-  }, [axiosPrivate, id])
+  }, [id, token])
 
   const modifyPost = async (event) => {
     event.preventDefault()
-
     const formData = new FormData()
     formData.append('content', content)
     formData.append('userName', userName)
     formData.append('image', file)
 
     try {
-      const response = await axiosPrivate.put('/api/posts/' + id, formData)
+      const response = await axios.put('/api/posts/' + id, formData, {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      })
       console.log(response.data)
       navigate('/home', { replace: true })
     } catch (err) {
@@ -82,7 +89,6 @@ const EditPost = () => {
   }
 
   const uploadImage = (event) => {
-    // event.preventDefault()
     setPicture(URL.createObjectURL(event.target.files[0]))
     setFile(event.target.files[0])
   }

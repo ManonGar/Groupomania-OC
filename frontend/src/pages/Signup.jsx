@@ -1,7 +1,7 @@
-import styled from 'styled-components'
 import { useState } from 'react'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import styled from 'styled-components'
+import axios from 'axios'
 import colors from '../utils/style/colors'
 
 const LoginCard = styled.div`
@@ -65,7 +65,7 @@ function SignUp() {
       console.log(JSON.stringify(response?.data))
       setEmail('')
       setPassword('')
-      navigate('/home', { replace: true })
+      navigate('/login', { replace: true })
     } catch (err) {
       console.log(err)
     }

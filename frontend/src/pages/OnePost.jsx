@@ -2,12 +2,11 @@ import styled from 'styled-components'
 import Card from '../components/Card'
 import colors from '../utils/style/colors'
 import { useEffect, useState } from 'react'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import { useParams, useNavigate } from 'react-router-dom'
-import useAuth from '../hooks/useAuth'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faHeartBroken } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
+import axios from '../api/axios'
 
 const MainContainer = styled.div`
   margin: 20px 60px;
@@ -78,8 +77,6 @@ const Buttons = styled.div`
 `
 
 const Post = () => {
-  const axiosPrivate = useAxiosPrivate()
-  const { auth } = useAuth()
   const [userName, setUserName] = useState('')
   const [content, setContent] = useState('')
   const [imageUrl, setImageUrl] = useState('')
@@ -88,16 +85,21 @@ const Post = () => {
   const [likes, setLikes] = useState()
   const [userId, setUserId] = useState()
   const { id } = useParams()
-  const userRole = auth?.userRole
-  const navigate = useNavigate()
-  const currentUserId = auth?.userId
+  const userRole = localStorage.getItem('userRole')
+  const currentUserId = localStorage.getItem('userId')
+  const token = localStorage.getItem('token')
+  let navigate = useNavigate()
 
   useEffect(() => {
     let isMounted = true
 
     const getPost = async () => {
       try {
-        const response = await axiosPrivate.get('/api/posts/' + id)
+        const response = await axios.get('/api/posts/' + id, {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+        })
         console.log(response.data)
         isMounted && setUserName(response.data.userName)
         setContent(response.data.content)
@@ -115,14 +117,18 @@ const Post = () => {
     return () => {
       isMounted = false
     }
-  }, [axiosPrivate, id])
+  }, [id, token])
 
   const deletePost = async (event) => {
     event.preventDefault()
     try {
-      const response = await axiosPrivate.delete('/api/posts/' + id)
+      const response = await axios.delete('/api/posts/' + id, {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      })
       console.log(response.data)
-      navigate('/', { replace: true })
+      navigate('/home', { replace: true })
     } catch (err) {
       console.error(err)
     }
@@ -130,10 +136,18 @@ const Post = () => {
 
   const Like = async () => {
     try {
-      const response = await axiosPrivate.post('/api/posts/' + id + '/like', {
-        userId: currentUserId,
-        like: 1,
-      })
+      const response = await axios.post(
+        '/api/posts/' + id + '/like',
+        {
+          userId: currentUserId,
+          like: 1,
+        },
+        {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+        }
+      )
       setLiked(true)
       setLikes(likes + 1)
       console.log(response.data)
@@ -144,10 +158,18 @@ const Post = () => {
 
   const unLike = async () => {
     try {
-      const response = await axiosPrivate.post('/api/posts/' + id + '/like', {
-        userId: currentUserId,
-        like: 0,
-      })
+      const response = await axios.post(
+        '/api/posts/' + id + '/like',
+        {
+          userId: currentUserId,
+          like: 0,
+        },
+        {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+        }
+      )
       console.log(response.data)
       setLiked(false)
       setLikes(likes - 1)
@@ -169,7 +191,6 @@ const Post = () => {
       <TitleContainer>
         <h1>Message</h1>
       </TitleContainer>
-
       <div>
         <Card id={id} content={content} picture={imageUrl} title={userName} />
         <Actions>

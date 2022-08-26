@@ -1,46 +1,38 @@
-import RequireAuth from './components/Auth'
-import PersistLogin from './components/PersistLogin'
+import { Routes, Route } from 'react-router-dom'
 
 import Home from './pages/Home'
 import Login from './pages/Login'
-import Layout from './pages/Layout'
 import Post from './pages/OnePost'
 import SignUp from './pages/Signup'
 import NewPost from './pages/NewPost'
-import EditPost from './components/EditPost'
+import EditPost from './pages/EditPost'
 import Error from './components/Error'
-import { Routes, Route } from 'react-router-dom'
 
 function App() {
+  const userId = localStorage.getItem('userId')
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
-        {/* public routes */}
-        <Route path="/login" element={<Login />} />
-        {/* <Route path="/logout" element={<Logout />} /> */}
-        <Route path="/signup" element={<SignUp />} />
+      {/* public routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
 
-        {/* protected routes */}
-        <Route element={<PersistLogin />}>
-          <Route element={<RequireAuth />}>
-            <Route path="/home" element={<Home />} />
-          </Route>
+      {/* protected routes */}
 
-          <Route element={<RequireAuth />}>
-            <Route path="/add" element={<NewPost />} />
-          </Route>
+      <Route path="/home" element={userId ? <Home /> : <Login />} />
+      {/* </Route> */}
 
-          <Route element={<RequireAuth />}>
-            <Route path="/posts/:id" element={<Post />} />
-          </Route>
+      {/* <Route element={<RequireAuth />}> */}
+      <Route path="/add" element={userId ? <NewPost /> : <Login />} />
+      {/* </Route> */}
 
-          <Route element={<RequireAuth />}>
-            <Route path="/edit/:id" element={<EditPost />} />
-          </Route>
-        </Route>
+      {/* <Route element={<RequireAuth />}> */}
+      <Route path="/posts/:id" element={userId ? <Post /> : <Login />} />
+      {/* </Route> */}
 
-        <Route path="*" element={<Error />} />
-      </Route>
+      {/* <Route element={<RequireAuth />}> */}
+      <Route path="/edit/:id" element={userId ? <EditPost /> : <Login />} />
+
+      <Route path="*" element={<Error />} />
     </Routes>
   )
 }

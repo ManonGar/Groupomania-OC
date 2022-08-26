@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import colors from './../utils/style/colors'
 import axios from '../api/axios'
-import useAuth from '../hooks/useAuth'
 
 const LoginCard = styled.div`
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
@@ -44,7 +43,6 @@ const Btn = styled.button`
 `
 
 function Login() {
-  const { setAuth } = useAuth()
   const LOGIN_URL = '/api/auth/login'
   let navigate = useNavigate()
 
@@ -73,32 +71,30 @@ function Login() {
       const token = response?.data?.token
       const userId = response?.data?.userId
       const userRole = response?.data?.role
-      setAuth({ token, userId, userRole })
-      localStorage.setItem('isLoggedin', true)
+      localStorage.setItem('userId', userId)
+      localStorage.setItem('token', token)
+      localStorage.setItem('userRole', userRole)
 
       setEmail('')
       setPassword('')
       navigate('/home', { replace: true })
+      window.location.reload()
     } catch (err) {
       if (!err?.response) {
         setErrMsg('No Server Response')
+        console.log(errMsg)
       } else if (err.response?.status === 400) {
         setErrMsg('Missing Username or Password')
+        console.log(errMsg)
       } else if (err.response?.status === 401) {
         setErrMsg('Unauthorized')
+        console.log(errMsg)
       } else {
         setErrMsg('Login Failed')
+        console.log(errMsg)
       }
     }
   }
-
-  // const togglePersist = () => {
-  //   setPersist((prev) => !prev)
-  // }
-
-  // useEffect(() => {
-  //   localStorage.setItem('persist', persist)
-  // }, [persist])
 
   return (
     <LoginCard>

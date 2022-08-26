@@ -1,11 +1,7 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import colors from '../utils/style/colors'
 import logo from './../assets/logo.png'
-import AuthContext from '../utils/context'
-import { useNavigate } from 'react-router-dom'
-import { useContext } from 'react'
-import useAuth from '../hooks/useAuth'
 
 const Navbar = styled.div`
   display: flex;
@@ -48,15 +44,11 @@ const LogOutBtn = styled.button`
 const HomeLink = styled(Link)``
 
 function Header() {
-  const { setAuth } = useContext(AuthContext)
-  const { auth } = useAuth()
-  const navigate = useNavigate()
-  // const { LoggedIn } = useAuth()
+  let navigate = useNavigate()
+  const userId = localStorage.getItem('userId')
+
   const logout = async () => {
-    // if used in more components, this should be in context
-    // axios to /logout endpoint
-    setAuth({})
-    localStorage.setItem('isLoggedin', false)
+    localStorage.clear()
     navigate('/login')
   }
 
@@ -67,7 +59,7 @@ function Header() {
       </HomeLink>
 
       <nav>
-        {auth?.token ? (
+        {userId ? (
           <LogOutBtn onClick={logout}>Me déconnecter</LogOutBtn>
         ) : (
           <div>
@@ -77,7 +69,6 @@ function Header() {
             </StyledLink>
           </div>
         )}
-        {/* <Logout /> */}
       </nav>
     </Navbar>
   )

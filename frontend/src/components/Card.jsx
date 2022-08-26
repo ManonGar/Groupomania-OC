@@ -52,8 +52,4 @@ Card.propTypes = {
   id: PropTypes.string,
 }
 
-// Card.defaultProps = {
-//   title: 'Mon titre par défaut',
-// }
-
 export default Card
