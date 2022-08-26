@@ -10,7 +10,7 @@ Fonctionnalités :
 - Liker tous les messages
 
 
-Projet développé avec REACT, express et MongoDB
+Projet développé avec REACT, express et MongoDB.
 
 Dépendances :
 - node
