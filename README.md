@@ -8,7 +8,6 @@ Fonctionnalités :
 - Créer un nouveau message
 - Modifier/supprimer son propre message
 - Liker tous les messages
-- Un utilisateur admin qui peut modifier et supprimer tous les messages
 
 
 Projet développé avec REACT, express et MongoDB
