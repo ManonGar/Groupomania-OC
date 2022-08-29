@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// On crée un schéma de données avec les champs requis pour une sauce
+// On crée un schéma de données avec les champs requis pour un post
 const postSchema = mongoose.Schema({
     userId: { type: String, required: true },
     content: { type: String, required: true },

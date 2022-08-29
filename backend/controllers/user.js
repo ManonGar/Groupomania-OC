@@ -1,11 +1,12 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+require('dotenv').config();
 
 // Création des différentes logiques pour les routes user (signup, login)
 
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)
+    bcrypt.hash(req.body.password, parseInt(process.env.HASH))
       .then(hash => {
         const user = new User({
           email: req.body.email,
@@ -34,7 +35,7 @@ User.findOne({ email: req.body.email })
             role: user.role,
             token: jwt.sign(
             { userId: user._id },
-            'RANDOM_TOKEN_SECRET',
+            process.env.KEY_TOKEN,
             { expiresIn: '24h' }
             )
         });
