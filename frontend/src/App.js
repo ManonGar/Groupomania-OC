@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -33,6 +33,7 @@ function App() {
       <Route path="/edit/:id" element={userId ? <EditPost /> : <Login />} />
 
       <Route path="*" element={<Error />} />
+      <Route path="/" element={<Navigate to="/login" />} />
     </Routes>
   )
 }
