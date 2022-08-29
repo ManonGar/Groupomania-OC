@@ -179,12 +179,12 @@ const Post = () => {
   }
 
   useEffect(() => {
-    if (usersLiked.includes(userId)) {
+    if (usersLiked.includes(currentUserId)) {
       setLiked(true)
     } else {
       setLiked(false)
     }
-  }, [userId, liked, usersLiked])
+  }, [currentUserId, usersLiked])
 
   return (
     <MainContainer>
@@ -196,14 +196,15 @@ const Post = () => {
         <Actions>
           <Likes>
             <NbOfLikes>{likes}</NbOfLikes>
-            <LikeBtn onClick={Like} type="submit">
+            <LikeBtn disabled={liked} onClick={Like} type="submit">
               <FontAwesomeIcon icon={faHeart} />
             </LikeBtn>
-            <UnlikeBtn onClick={unLike} type="submit">
-              <FontAwesomeIcon icon={faHeartBroken} />
-            </UnlikeBtn>
+            {liked === true && (
+              <UnlikeBtn onClick={unLike} type="submit">
+                <FontAwesomeIcon icon={faHeartBroken} />
+              </UnlikeBtn>
+            )}
           </Likes>
-
           <Buttons>
             <div>
               {userId === currentUserId || userRole === 'admin' ? (
